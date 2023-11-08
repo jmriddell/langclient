@@ -32,7 +32,7 @@ def side_effect(function: Callable, iter: Iterable):
 
 def print_inline(string: str):
     """Print the given string inline."""
-    print(string, end="")
+    print(string, end="", flush=True)
 
 
 def print_intercept(iter: Iterable):
