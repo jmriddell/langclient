@@ -9,18 +9,18 @@ from openai_auth import use_key
 from models import Message, Role
 
 
-def messages_accumulate(messages: Iterable[Message]):
+def _messages_accumulate(messages: Iterable[Message]):
     """Accumulate the messages in a chat."""
     return accumulate(messages, lambda acc, message: [*acc, message], initial=[])
 
 
-def user_input() -> Iterable[Message]:
+def _user_input() -> Iterable[Message]:
     """Get user input for a chat."""
     while True:
         yield Message(role=Role.USER, content=input("You:\n"))
 
 
-def side_effect(function: Callable, iter: Iterable):
+def _side_effect(function: Callable, iter: Iterable):
     """Call the given function on each item in the given iterable."""
 
     def call_and_pass(item):
@@ -30,14 +30,14 @@ def side_effect(function: Callable, iter: Iterable):
     yield from (call_and_pass(item) for item in iter)
 
 
-def print_inline(string: str):
+def _print_inline(string: str):
     """Print the given string inline."""
     print(string, end="", flush=True)
 
 
-def print_intercept(iter: Iterable):
+def _print_intercept(iter: Iterable):
     """Print the given iterable inline."""
-    return side_effect(print_inline, iter)
+    return _side_effect(_print_inline, iter)
 
 
 def main():
@@ -50,7 +50,7 @@ def main():
 
     messages = []
 
-    for user_message in user_input():
+    for user_message in _user_input():
         messages.append(user_message)
 
         print("\nAssistant:")
@@ -58,7 +58,7 @@ def main():
         messages.append(
             Message(
                 role=Role.ASSISTANT,
-                content="".join(print_intercept(assistant_response_chunks)),
+                content="".join(_print_intercept(assistant_response_chunks)),
             )
         )
         print()
