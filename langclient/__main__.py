@@ -2,7 +2,7 @@
 
 from itertools import accumulate
 from typing import Iterable, Callable
-import readline
+import readline  # noqa: F401
 
 from chat_functions import stream_chat
 from openai_auth import use_key
