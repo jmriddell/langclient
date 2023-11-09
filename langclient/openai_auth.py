@@ -2,6 +2,7 @@
 
 from typing import Callable
 from functools import wraps, partial
+from io import TextIOWrapper
 
 
 def use_key(api_key: str) -> Callable[[Callable], Callable]:
@@ -21,8 +22,11 @@ def use_key(api_key: str) -> Callable[[Callable], Callable]:
     return decorator
 
 
-def read_key_from_file(path: str = ".openai-key", open: type(open) = open) -> str:
-    with open(path) as file:
+_OpenFunction = Callable[[str], TextIOWrapper]
+
+
+def read_key_from_file(path: str = ".openai-key", open_: _OpenFunction = open) -> str:
+    with open_(path) as file:
         return file.read().strip()
 
 
