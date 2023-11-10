@@ -11,7 +11,7 @@ from openai_auth import use_key, read_key_from_file
 from models import Message, Role
 
 
-def _raceful_exit(function: Callable) -> Callable:
+def _graceful_exit(function: Callable) -> Callable:
     """Call the given function and exit gracefully on KeyboardInterrupt."""
 
     def wrapper(*args, **kwargs):
@@ -94,7 +94,7 @@ def _chat_sequence_process(
     return accumulate(user_input, accumulate_function, initial=[])
 
 
-@_raceful_exit
+@_graceful_exit
 def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
     # Prompt the user for their API key
     api_key = (
