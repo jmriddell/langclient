@@ -1,6 +1,7 @@
 """Interactive demo for langclient."""
 
 from itertools import accumulate
+from functools import partial
 import argparse
 from typing import Iterable, Callable
 import readline  # noqa: F401
@@ -70,6 +71,29 @@ def _read_key_from_file_if_path(path: str | None) -> str | None:
     return read_key_from_file(path)
 
 
+def _step_process(
+    previous_messages: list[Message], user_message: Message, chat_function: Callable
+) -> list[Message]:
+    """Get the next step in the conversation."""
+    print("\nAssistant:")
+    assistant_response_chunks = chat_function([*previous_messages, user_message])
+
+    assistant_response = Message(
+        role=Role.ASSISTANT,
+        content="".join(_print_intercept(assistant_response_chunks)),
+    )
+    print()
+    print()
+    return [*previous_messages, user_message, assistant_response]
+
+
+def _chat_sequence_process(
+    user_input: Iterable[Message], chat_function: Callable
+) -> Iterable[Message]:
+    accumulate_function = partial(_step_process, chat_function=chat_function)
+    return accumulate(user_input, accumulate_function, initial=[])
+
+
 @_raceful_exit
 def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
     # Prompt the user for their API key
@@ -83,21 +107,8 @@ def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None 
     # Decorate the stream_chat function with the given key
     stream_chat_ = use_key(api_key)(stream_chat)
 
-    messages = []
-
-    for user_message in _user_input():
-        messages.append(user_message)
-
-        print("\nAssistant:")
-        assistant_response_chunks = stream_chat_(messages)
-        messages.append(
-            Message(
-                role=Role.ASSISTANT,
-                content="".join(_print_intercept(assistant_response_chunks)),
-            )
-        )
-        print()
-        print()
+    for _ in _chat_sequence_process(_user_input(), stream_chat_):
+        pass
 
 
 if __name__ == "__main__":
