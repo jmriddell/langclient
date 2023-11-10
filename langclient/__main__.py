@@ -10,6 +10,20 @@ from openai_auth import use_key, read_key_from_file
 from models import Message, Role
 
 
+def _raceful_exit(function: Callable) -> Callable:
+    """Call the given function and exit gracefully on KeyboardInterrupt."""
+
+    def wrapper(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except KeyboardInterrupt:
+            print()
+            print("Exiting...")
+            exit(0)
+
+    return wrapper
+
+
 def _messages_accumulate(messages: Iterable[Message]):
     """Accumulate the messages in a chat."""
     return accumulate(messages, lambda acc, message: [*acc, message], initial=[])
@@ -56,6 +70,7 @@ def _read_key_from_file_if_path(path: str | None) -> str | None:
     return read_key_from_file(path)
 
 
+@_raceful_exit
 def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
     # Prompt the user for their API key
     api_key = (
