@@ -25,11 +25,6 @@ def _graceful_exit(function: Callable) -> Callable:
     return wrapper
 
 
-def _messages_accumulate(messages: Iterable[Message]):
-    """Accumulate the messages in a chat."""
-    return accumulate(messages, lambda acc, message: [*acc, message], initial=[])
-
-
 def _user_input() -> Iterable[Message]:
     """Get user input for a chat."""
     while True:
