@@ -94,6 +94,26 @@ def _chat_sequence_process(
     return accumulate(user_input, accumulate_function, initial=[])
 
 
+def _get_arguments() -> dict:
+    """Get the arguments for the main function."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--api-key",
+        "-k",
+        type=str,
+        help="The api key to use.",
+        dest="pre_provided_api_key",
+    )
+    parser.add_argument(
+        "--api-key-file",
+        "-f",
+        type=str,
+        help="The file to read the api key from.",
+        dest="api_key_file_path",
+    )
+    return vars(parser.parse_args())
+
+
 @_graceful_exit
 def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
     # Prompt the user for their API key
@@ -112,21 +132,4 @@ def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None 
 
 
 if __name__ == "__main__":
-    # read args
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--api-key",
-        "-k",
-        type=str,
-        help="The api key to use.",
-    )
-    parser.add_argument(
-        "--api-key-file",
-        "-f",
-        type=str,
-        help="The file to read the api key from.",
-    )
-    args = parser.parse_args()
-
-    # run main
-    main(args.api_key, args.api_key_file)
+    main(**_get_arguments())
