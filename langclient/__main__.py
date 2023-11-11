@@ -114,17 +114,20 @@ def _get_arguments() -> dict:
     return vars(parser.parse_args())
 
 
+def _prompt_for_api_key():
+    api_key = input("Please enter your API key: ")
+    print()
+    return api_key
+
+
 @_graceful_exit
 def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
     # Prompt the user for their API key
     api_key = (
         pre_provided_api_key
         or _read_key_from_file_if_path(api_key_file_path)
-        or input("Please enter your API key: ")
+        or _prompt_for_api_key()
     )
-    print()
-
-    # Decorate the stream_chat function with the given key
     stream_chat_ = use_key(api_key)(stream_chat)
 
     for _ in _chat_sequence_process(_user_input(), stream_chat_):
