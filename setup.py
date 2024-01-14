@@ -5,9 +5,11 @@ with open("readme.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
+DEPENDENCIES = ["openai", "pydantic"]
+
 setup(
     name="langclient",
-    version="0.1.1",
+    version="0.1.2",
     description="Simple OpenAI language repl client",
     author="Juan Molina Riddell",
     author_email="jmriddell@protonmail.ch",
@@ -25,6 +27,7 @@ setup(
         "Topic :: Utilities",
     ],
     packages=find_packages(),
-    intall_requires=["openai", "pydantic"],
+    intall_requires=DEPENDENCIES,
+    setup_requires=DEPENDENCIES,
     entry_points=dict(console_scripts=["langclient=langclient.__main__:entrypoint"]),
 )
