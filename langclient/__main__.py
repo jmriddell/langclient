@@ -133,5 +133,9 @@ def interactve_chat(
         pass
 
 
-if __name__ == "__main__":
+def entrypoint():
     interactve_chat(**_get_arguments())
+
+
+if __name__ == "__main__":
+    entrypoint()

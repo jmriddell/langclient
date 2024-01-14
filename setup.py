@@ -7,7 +7,7 @@ with open("readme.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="langclient",
-    version="0.1",
+    version="0.1.1",
     description="Simple OpenAI language repl client",
     author="Juan Molina Riddell",
     author_email="jmriddell@protonmail.ch",
@@ -26,5 +26,5 @@ setup(
     ],
     packages=find_packages(),
     intall_requires=["openai", "pydantic"],
-    entry_points=dict(console_scripts=["langclient=langclient"]),
+    entry_points=dict(console_scripts=["langclient=langclient.__main__:entrypoint"]),
 )
