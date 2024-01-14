@@ -2,8 +2,8 @@ from typing import Iterable
 
 import openai
 
-from models import Message
-from data_transformations import message_to_dict
+from langclient.models import Message
+from langclient.data_transformations import message_to_dict
 
 
 def stream_chat(

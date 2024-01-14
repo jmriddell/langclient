@@ -1,4 +1,4 @@
-from models import Role, Message
+from langclient.models import Role, Message
 
 
 def message_from_dict(dictionary: dict) -> "Message":

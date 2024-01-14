@@ -6,9 +6,9 @@ import argparse
 from typing import Iterable, Callable
 import readline  # noqa: F401
 
-from chat_functions import stream_chat
-from openai_auth import use_key, read_key_from_file
-from models import Message, Role
+from langclient.chat_functions import stream_chat
+from langclient.openai_auth import use_key, read_key_from_file
+from langclient.models import Message, Role
 
 
 def _graceful_exit(function: Callable) -> Callable:

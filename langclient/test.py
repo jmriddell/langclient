@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from openai_auth import use_key
-from _wrap_helpers import make_api_key_argument_mandatory
+from langclient.openai_auth import use_key
+from langclient._wrap_helpers import make_api_key_argument_mandatory
 
 
 class TestApplyKey(TestCase):
