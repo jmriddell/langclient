@@ -27,7 +27,7 @@ setup(
         "Topic :: Utilities",
     ],
     packages=find_packages(),
-    intall_requires=DEPENDENCIES,
+    install_requires=DEPENDENCIES,
     setup_requires=DEPENDENCIES,
     entry_points=dict(console_scripts=["langclient=langclient.__main__:entrypoint"]),
 )
