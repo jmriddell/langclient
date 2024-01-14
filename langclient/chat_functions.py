@@ -1,6 +1,7 @@
 from typing import Iterable
 
-import openai
+from openai import OpenAI
+from openai.types.chat import ChatCompletionChunk
 
 from langclient.models import Message
 from langclient.data_transformations import message_to_dict
@@ -17,7 +18,8 @@ def stream_chat(
     frequency_penalty=0,
     presence_penalty=0
 ) -> Iterable[str]:
-    generator = openai.ChatCompletion.create(
+    client = OpenAI(api_key=api_key)
+    generator: Iterable[ChatCompletionChunk] = client.chat.completions.create(
         model=model,
         messages=list(map(message_to_dict, messages)),
         temperature=temperature,
@@ -26,11 +28,9 @@ def stream_chat(
         frequency_penalty=frequency_penalty,
         presence_penalty=presence_penalty,
         stream=True,
-        api_key=api_key,
     )
 
-    deltas = map(lambda chunk: chunk["choices"][0]["delta"], generator)
-    content_deltas = filter(lambda delta: "content" in delta, deltas)
-    content = map(lambda delta: delta["content"], content_deltas)
+    deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
+    not_none_content = filter(lambda content: content is not None, deltas_content)
 
-    return content
+    return not_none_content
