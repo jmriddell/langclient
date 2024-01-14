@@ -9,6 +9,12 @@ Simple interactive console language client for OpenAI. Useful for using GPT-4 wi
 * git
 * python >= 3.11
 
+For termux you will also need to install:
+
+* rust
+* binutils
+
+
 ### Install
 
 ```bash
