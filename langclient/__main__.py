@@ -116,18 +116,22 @@ def _prompt_for_api_key():
 
 
 @_graceful_exit
-def main(pre_provided_api_key: str | None = None, api_key_file_path: str | None = None):
+def interactve_chat(
+    pre_provided_api_key: str | None = None, api_key_file_path: str | None = None
+):
     # Prompt the user for their API key
     api_key = (
         pre_provided_api_key
         or _read_key_from_file_if_path(api_key_file_path)
         or _prompt_for_api_key()
     )
-    stream_chat_ = use_key(api_key)(stream_chat)
+    stream_chat_ = use_key(api_key)(
+        partial(stream_chat, model="gpt-4-1106-preview", max_tokens=3500)
+    )
 
     for _ in _chat_sequence_process(_user_input(), stream_chat_):
         pass
 
 
 if __name__ == "__main__":
-    main(**_get_arguments())
+    interactve_chat(**_get_arguments())
