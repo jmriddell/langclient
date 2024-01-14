@@ -1,5 +1,7 @@
 # langclient
 
+Simple interactive console language client for OpenAI. Useful for using GPT-4 with an API subscription.
+
 ## Installation
 
 ### Prerequisites
