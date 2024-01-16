@@ -9,7 +9,7 @@ DEPENDENCIES = ["openai", "pydantic"]
 
 setup(
     name="langclient",
-    version="0.1.4",
+    version="0.2.0",
     description="Simple OpenAI language repl client",
     author="Juan Molina Riddell",
     author_email="jmriddell@protonmail.ch",
