@@ -9,6 +9,7 @@ import readline  # noqa: F401
 from langclient.chat_functions import stream_chat
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.models import Message, Role
+from os.path import isfile, expanduser
 
 
 def _graceful_exit(function: Callable) -> Callable:
@@ -115,6 +116,12 @@ def _prompt_for_api_key():
     return api_key
 
 
+def _get_key_from_config(filepath=expanduser("~/.langclient/openai-key")):
+    if not isfile(filepath):
+        return None
+    return _read_key_from_file_if_path(filepath)
+
+
 @_graceful_exit
 def interactve_chat(
     pre_provided_api_key: str | None = None, api_key_file_path: str | None = None
@@ -123,6 +130,7 @@ def interactve_chat(
     api_key = (
         pre_provided_api_key
         or _read_key_from_file_if_path(api_key_file_path)
+        or _get_key_from_config()
         or _prompt_for_api_key()
     )
     stream_chat_ = use_key(api_key)(
