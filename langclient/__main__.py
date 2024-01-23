@@ -4,6 +4,7 @@ from itertools import accumulate
 from functools import partial
 import argparse
 from typing import Iterable, Callable
+import inquirer
 import readline  # noqa: F401
 
 from langclient.chat_functions import stream_chat
@@ -133,8 +134,21 @@ def interactve_chat(
         or _get_key_from_config()
         or _prompt_for_api_key()
     )
+
+    select_model = [
+        inquirer.List('model',
+            message="Select a model:",
+            choices=[
+                "gpt-3.5-turbo-1106", 
+                "gpt-4-1106-preview", 
+                "gpt-4"
+            ]
+        ),
+    ]
+    answer = inquirer.prompt(select_model)
+
     stream_chat_ = use_key(api_key)(
-        partial(stream_chat, model="gpt-4-1106-preview", max_tokens=3500)
+        partial(stream_chat, model=answer["model"], max_tokens=3500)
     )
 
     for _ in _chat_sequence_process(_user_input(), stream_chat_):
