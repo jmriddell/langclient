@@ -17,7 +17,7 @@ def stream_chat(
     max_tokens=14505,
     top_p=1,
     frequency_penalty=0,
-    presence_penalty=0
+    presence_penalty=0,
 ) -> Iterable[str]:
     client = OpenAI(api_key=api_key)
     generator: Iterable[ChatCompletionChunk] = client.chat.completions.create(
@@ -39,9 +39,9 @@ def stream_chat(
 
 def _parse_file_content(message: str) -> dict:
     "Match file mentions in <angle brackets> on message and parse them as content"
-    pattern = r'<(.*?)>'
+    pattern = r"<(.*?)>"
     files = findall(pattern, message)
-    
+
     def _segment_file_content(file):
         content = f"START {file} CONTENT:  "
 
@@ -52,10 +52,10 @@ def _parse_file_content(message: str) -> dict:
             return f"FILE {file} NOT ACCESSIBLE"
 
         content += f"  END {file} CONTENT"
-        
+
         return content
 
-    contents = [ _segment_file_content(file) for file in files ]
+    contents = [_segment_file_content(file) for file in files]
 
     return "  ".join(contents)
 
