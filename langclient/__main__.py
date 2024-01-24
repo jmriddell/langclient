@@ -5,11 +5,9 @@ from functools import partial
 import argparse
 from typing import Iterable, Callable
 
-import re
-
 import readline  # noqa: F401
 
-from langclient.chat_functions import stream_chat
+from langclient.chat_functions import stream_chat, user_input
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.models import Message, Role
 from langclient.start_manu import select_language_model
@@ -28,28 +26,6 @@ def _graceful_exit(function: Callable) -> Callable:
             exit(0)
 
     return wrapper
-
-
-def _segment_content(file):
-    return f"START {file} CONTENT:" + "\n" + open(file).read() + f"\nEND {file} CONTENT"
-
-
-def _parse_file_content(message: str) -> dict:
-    pattern = r'<(.*?)>'
-    files = re.findall(pattern, message)
-
-    contents = [ _segment_content(file) for file in files ]
-
-    return "\n\n".join(contents)
-
-
-def _user_input() -> Iterable[Message]:
-    """Get user input for a chat."""
-    input_message = input("You:\n")
-    content = input_message + _parse_file_content(input_message)
-
-    while True:
-        yield Message(role=Role.USER, content=content)
 
 
 def _side_effect(function: Callable, iter: Iterable):
@@ -160,7 +136,7 @@ def interactve_chat(
         partial(stream_chat, model=model_selected, max_tokens=3500)
     )
 
-    for _ in _chat_sequence_process(_user_input(), stream_chat_):
+    for _ in _chat_sequence_process(user_input(), stream_chat_):
         pass
 
 
