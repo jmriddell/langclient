@@ -4,6 +4,9 @@ from itertools import accumulate
 from functools import partial
 import argparse
 from typing import Iterable, Callable
+
+import re
+
 import readline  # noqa: F401
 
 from langclient.chat_functions import stream_chat, user_input
