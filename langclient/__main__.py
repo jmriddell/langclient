@@ -4,6 +4,9 @@ from itertools import accumulate
 from functools import partial
 import argparse
 from typing import Iterable, Callable
+
+import re
+
 import readline  # noqa: F401
 
 from langclient.chat_functions import stream_chat
@@ -27,10 +30,26 @@ def _graceful_exit(function: Callable) -> Callable:
     return wrapper
 
 
+def _segment_content(file):
+    return f"START {file} CONTENT:" + "\n" + open(file).read() + f"\nEND {file} CONTENT"
+
+
+def _parse_file_content(message: str) -> dict:
+    pattern = r'<(.*?)>'
+    files = re.findall(pattern, message)
+
+    contents = [ _segment_content(file) for file in files ]
+
+    return "\n\n".join(contents)
+
+
 def _user_input() -> Iterable[Message]:
     """Get user input for a chat."""
+    input_message = input("You:\n")
+    content = input_message + _parse_file_content(input_message)
+
     while True:
-        yield Message(role=Role.USER, content=input("You:\n"))
+        yield Message(role=Role.USER, content=content)
 
 
 def _side_effect(function: Callable, iter: Iterable):
