@@ -8,5 +8,9 @@ def message_from_dict(dictionary: dict) -> "Message":
     )
 
 
+
+
+
+
 def message_to_dict(message: Message) -> dict:
     return {"role": message.role.value, "content": message.content}
