@@ -5,7 +5,7 @@ with open("readme.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
-DEPENDENCIES = ["openai", "pydantic"]
+DEPENDENCIES = ["openai", "pydantic", "inquirer"]
 
 setup(
     name="langclient",
