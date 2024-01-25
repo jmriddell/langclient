@@ -7,7 +7,7 @@ from typing import Iterable, Callable
 
 import readline  # noqa: F401
 
-from langclient.chat_functions import stream_chat, user_input
+from langclient.chat_functions import stream_chat, user_input, step_process
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.models import Message, Role
 from langclient.start_menu import select_language_model
@@ -28,26 +28,6 @@ def _graceful_exit(function: Callable) -> Callable:
     return wrapper
 
 
-def _side_effect(function: Callable, iter: Iterable):
-    """Call the given function on each item in the given iterable."""
-
-    def call_and_pass(item):
-        function(item)
-        return item
-
-    yield from (call_and_pass(item) for item in iter)
-
-
-def _print_inline(string: str):
-    """Print the given string inline."""
-    print(string, end="", flush=True)
-
-
-def _print_intercept(iter: Iterable):
-    """Print the given iterable inline."""
-    return _side_effect(_print_inline, iter)
-
-
 def _read_key_from_file_if_path(path: str | None) -> str | None:
     """Read the key from the given path if it exists.
 
@@ -63,26 +43,10 @@ def _read_key_from_file_if_path(path: str | None) -> str | None:
     return read_key_from_file(path)
 
 
-def _step_process(
-    previous_messages: list[Message], user_message: Message, chat_function: Callable
-) -> list[Message]:
-    """Get the next step in the conversation."""
-    print("\nAssistant:")
-    assistant_response_chunks = chat_function([*previous_messages, user_message])
-
-    assistant_response = Message(
-        role=Role.ASSISTANT,
-        content="".join(_print_intercept(assistant_response_chunks)),
-    )
-    print()
-    print()
-    return [*previous_messages, user_message, assistant_response]
-
-
 def _chat_sequence_process(
     user_input: Iterable[Message], chat_function: Callable
 ) -> Iterable[Message]:
-    accumulate_function = partial(_step_process, chat_function=chat_function)
+    accumulate_function = partial(step_process, chat_function=chat_function)
     return accumulate(user_input, accumulate_function, initial=[])
 
 

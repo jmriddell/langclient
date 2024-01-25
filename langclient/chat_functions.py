@@ -1,5 +1,6 @@
-from typing import Iterable
+from typing import Iterable, Callable
 from re import findall
+from colorama import Fore
 
 from openai import OpenAI
 from openai.types.chat import ChatCompletionChunk
@@ -64,6 +65,42 @@ def user_input() -> Iterable[Message]:
     """Get user input for a chat."""
 
     while True:
-        input_message = input("You:\n")
+        input_message = input(Fore.CYAN + "You:\n" + Fore.RESET)
         input_message += _parse_file_content(input_message)
         yield Message(role=Role.USER, content=input_message)
+
+
+def _side_effect(function: Callable, iter: Iterable):
+    """Call the given function on each item in the given iterable."""
+
+    def call_and_pass(item):
+        function(item)
+        return item
+
+    yield from (call_and_pass(item) for item in iter)
+
+
+def _print_inline(string: str):
+    """Print the given string inline."""
+    print(string, end="", flush=True)
+
+
+def _print_intercept(iter: Iterable):
+    """Print the given iterable inline."""
+    return _side_effect(_print_inline, iter)
+
+
+def step_process(
+    previous_messages: list[Message], user_message: Message, chat_function: Callable
+) -> list[Message]:
+    """Get the next step in the conversation."""
+    print(Fore.CYAN + "\nAssistant:" + Fore.RESET)
+    assistant_response_chunks = chat_function([*previous_messages, user_message])
+
+    assistant_response = Message(
+        role=Role.ASSISTANT,
+        content="".join(_print_intercept(assistant_response_chunks)),
+    )
+    print()
+    print()
+    return [*previous_messages, user_message, assistant_response]
