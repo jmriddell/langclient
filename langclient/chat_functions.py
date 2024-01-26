@@ -69,8 +69,8 @@ def _parse_file_content(message: str) -> str:
     return "  ".join(contents)
 
 
-def user_input() -> Iterable[Message]:
-    """Get user input for a chat."""
+def chat_input() -> Iterable[Message]:
+    """Chat input stream."""
 
     while True:
         input_message = input(Fore.CYAN + "You:\n" + Fore.RESET)

@@ -7,7 +7,7 @@ from typing import Iterable, Callable
 
 import readline  # noqa: F401
 
-from langclient.chat_functions import stream_chat, user_input, step_process
+from langclient.chat_functions import stream_chat, chat_input, step_process
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.models import Message, Role
 from langclient.start_menu import select_language_model
@@ -100,7 +100,7 @@ def interactve_chat(
         partial(stream_chat, model=model_selected, max_tokens=3500)
     )
 
-    for _ in _chat_sequence_process(user_input(), stream_chat_):
+    for _ in _chat_sequence_process(chat_input(), stream_chat_):
         pass
 
 
