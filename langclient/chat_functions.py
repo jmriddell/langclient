@@ -38,10 +38,15 @@ def stream_chat(
     return not_none_content
 
 
+def _get_files_from_message(message: str) -> list[str]:
+    "Match file mentions in <angle brackets> on message and return their names"
+    pattern = r"<(.*?)>"
+    return findall(pattern, message)
+
+
 def _parse_file_content(message: str) -> dict:
     "Match file mentions in <angle brackets> on message and parse them as content"
-    pattern = r"<(.*?)>"
-    files = findall(pattern, message)
+    files = _get_files_from_message(message)
 
     def _segment_file_content(file):
         content = f"START {file} CONTENT:  "
