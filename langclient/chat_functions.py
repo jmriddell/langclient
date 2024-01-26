@@ -44,24 +44,27 @@ def _get_files_from_message(message: str) -> list[str]:
     return findall(pattern, message)
 
 
+def _file_content_section(filename: str, file_content: str | None) -> str:
+    "Return a file content section in a format friendly to the language model"
+    if file_content is None:
+        return f"FILE {filename} NOT ACCESSIBLE"
+    return f"START {filename} CONTENT:  {file_content}  END {filename} CONTENT"
+
+
+def _get_file_content(filename: str) -> str | None:
+    "Get the content of the file with the given name"
+    try:
+        with open(filename) as data:
+            return data.read()
+    except FileNotFoundError:
+        return None
+
+
 def _parse_file_content(message: str) -> dict:
     "Match file mentions in <angle brackets> on message and parse them as content"
     files = _get_files_from_message(message)
 
-    def _segment_file_content(file):
-        content = f"START {file} CONTENT:  "
-
-        try:
-            with open(file) as data:
-                content += data.read()
-        except FileNotFoundError:
-            return f"FILE {file} NOT ACCESSIBLE"
-
-        content += f"  END {file} CONTENT"
-
-        return content
-
-    contents = [_segment_file_content(file) for file in files]
+    contents = [_file_content_section(file, _get_file_content(file)) for file in files]
 
     return "  ".join(contents)
 
