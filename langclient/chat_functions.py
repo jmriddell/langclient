@@ -1,4 +1,4 @@
-from typing import Iterable, Callable
+from typing import Iterable, Callable, TypeGuard
 from re import findall
 from colorama import Fore
 
@@ -21,9 +21,10 @@ def stream_chat(
     presence_penalty=0,
 ) -> Iterable[str]:
     client = OpenAI(api_key=api_key)
+    list_of_dict_messages = list(map(message_to_dict, messages))
     generator: Iterable[ChatCompletionChunk] = client.chat.completions.create(
         model=model,
-        messages=list(map(message_to_dict, messages)),
+        messages=list_of_dict_messages,
         temperature=temperature,
         max_tokens=max_tokens,
         top_p=top_p,
@@ -33,8 +34,11 @@ def stream_chat(
     )
 
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
-    not_none_content = filter(lambda content: content is not None, deltas_content)
 
+    def _typeguard(content: str | None) -> TypeGuard[str]:
+        return content is not None
+
+    not_none_content = filter(_typeguard, deltas_content)
     return not_none_content
 
 
