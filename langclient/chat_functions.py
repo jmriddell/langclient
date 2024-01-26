@@ -60,7 +60,7 @@ def _get_file_content(filename: str) -> str | None:
         return None
 
 
-def _parse_file_content(message: str) -> dict:
+def _parse_file_content(message: str) -> str:
     "Match file mentions in <angle brackets> on message and parse them as content"
     files = _get_files_from_message(message)
 
