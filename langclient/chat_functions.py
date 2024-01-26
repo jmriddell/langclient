@@ -60,13 +60,18 @@ def _get_file_content(filename: str) -> str | None:
         return None
 
 
+def _make_files_content_section(filenames: Iterable[str]) -> str:
+    "Make a file content section for each file in filenames"
+    file_contents = map(_get_file_content, filenames)
+    file_sections = map(_file_content_section, filenames, file_contents)
+    return "  ".join(file_sections)
+
+
 def _parse_file_content(message: str) -> str:
-    "Match file mentions in <angle brackets> on message and parse them as content"
+    "Find file mentions in <angle brackets> and make a section for the contents"
     files = _get_files_from_message(message)
 
-    contents = [_file_content_section(file, _get_file_content(file)) for file in files]
-
-    return "  ".join(contents)
+    return _make_files_content_section(files)
 
 
 def _enhance_user_input(user_input: str) -> Message:
