@@ -69,13 +69,18 @@ def _parse_file_content(message: str) -> str:
     return "  ".join(contents)
 
 
+def _enhance_user_input(user_input: str) -> Message:
+    """Enhance the user input with file content."""
+    message_content = user_input + _parse_file_content(user_input)
+    return Message(role=Role.USER, content=message_content)
+
+
 def chat_input() -> Iterable[Message]:
     """Chat input stream."""
 
     while True:
         input_message = input(Fore.CYAN + "You:\n" + Fore.RESET)
-        input_message += _parse_file_content(input_message)
-        yield Message(role=Role.USER, content=input_message)
+        yield _enhance_user_input(input_message)
 
 
 def _side_effect(function: Callable, iter: Iterable):
