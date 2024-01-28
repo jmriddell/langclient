@@ -10,7 +10,6 @@ import readline  # noqa: F401
 from langclient.chat_functions import stream_chat
 from langclient.interactive_chat_handling import chat_input, chat_sequence_process
 from langclient.openai_auth import use_key, read_key_from_file
-from langclient.models import Message, Role
 from langclient.start_menu import select_language_model
 from os.path import isfile, expanduser
 
