@@ -8,7 +8,7 @@ from typing import Iterable, Callable
 import readline  # noqa: F401
 
 from langclient.chat_functions import stream_chat
-from langclient.interactive_chat_handling import chat_input, step_process
+from langclient.interactive_chat_handling import chat_input, chat_sequence_process
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.models import Message, Role
 from langclient.start_menu import select_language_model
@@ -42,13 +42,6 @@ def _read_key_from_file_if_path(path: str | None) -> str | None:
     if path is None:
         return None
     return read_key_from_file(path)
-
-
-def _chat_sequence_process(
-    user_input: Iterable[Message], chat_function: Callable
-) -> Iterable[Message]:
-    accumulate_function = partial(step_process, chat_function=chat_function)
-    return accumulate(user_input, accumulate_function, initial=[])
 
 
 def _get_arguments() -> dict:
@@ -101,7 +94,7 @@ def interactve_chat(
         partial(stream_chat, model=model_selected, max_tokens=3500)
     )
 
-    for _ in _chat_sequence_process(chat_input(), stream_chat_):
+    for _ in chat_sequence_process(chat_input(), stream_chat_):
         pass
 
 
