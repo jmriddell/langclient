@@ -77,7 +77,7 @@ def _print_intercept(iter: Iterable):
     return _side_effect(_print_inline, iter)
 
 
-def step_process(
+def _step_process(
     previous_messages: list[Message], user_message: Message, chat_function: Callable
 ) -> list[Message]:
     """Get the next step in the conversation."""
@@ -96,5 +96,5 @@ def step_process(
 def chat_sequence_process(
     user_input: Iterable[Message], chat_function: Callable
 ) -> Iterable[Message]:
-    accumulate_function = partial(step_process, chat_function=chat_function)
+    accumulate_function = partial(_step_process, chat_function=chat_function)
     return accumulate(user_input, accumulate_function, initial=[])
