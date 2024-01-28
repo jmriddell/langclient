@@ -1,6 +1,8 @@
 from re import findall
 from typing import Iterable, Callable
 from colorama import Fore
+from itertools import accumulate
+from functools import partial
 
 from langclient.models import Message, Role
 
@@ -89,3 +91,10 @@ def step_process(
     print()
     print()
     return [*previous_messages, user_message, assistant_response]
+
+
+def chat_sequence_process(
+    user_input: Iterable[Message], chat_function: Callable
+) -> Iterable[Message]:
+    accumulate_function = partial(step_process, chat_function=chat_function)
+    return accumulate(user_input, accumulate_function, initial=[])
