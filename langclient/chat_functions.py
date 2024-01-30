@@ -117,12 +117,22 @@ def step_process(
 ) -> list[Message]:
     """Get the next step in the conversation."""
     print(Fore.CYAN + "\nAssistant:" + Fore.RESET)
-    assistant_response_chunks = chat_function([*previous_messages, user_message])
 
-    assistant_response = Message(
-        role=Role.ASSISTANT,
-        content="".join(_print_intercept(assistant_response_chunks)),
-    )
+    try:
+        assistant_response_chunks = chat_function([*previous_messages, user_message])
+        assistant_response = Message(
+            role=Role.ASSISTANT,
+            content="".join(_print_intercept(assistant_response_chunks)),
+        )
+
+    except Exception as error:
+        error_response = Fore.RED + error.body["code"] + Fore.RESET + ":"
+        error_response += error.body["message"]
+
+        print(error_response)
+        print()
+        exit()
+
     print()
     print()
     return [*previous_messages, user_message, assistant_response]
