@@ -5,7 +5,7 @@ from functools import partial
 import argparse
 from typing import Iterable, Callable
 
-import readline  # noqa: F401
+## import readline  # noqa: F401
 
 from langclient.chat_functions import stream_chat
 from langclient.interactive_chat_handling import chat_input, chat_sequence_process
@@ -13,6 +13,8 @@ from langclient.openai_auth import use_key, read_key_from_file
 from langclient.start_menu import select_language_model
 from os.path import isfile, expanduser
 
+from pyreadline3 import Readline
+readline = Readline()
 
 def _graceful_exit(function: Callable) -> Callable:
     """Call the given function and exit gracefully on KeyboardInterrupt."""
