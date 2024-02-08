@@ -2,3 +2,4 @@ openai
 pydantic
 inquirer
 colorama
+pyreadline3

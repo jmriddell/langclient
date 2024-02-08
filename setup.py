@@ -5,11 +5,11 @@ with open("readme.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
-DEPENDENCIES = ["openai", "pydantic", "inquirer", "colorama"]
+DEPENDENCIES = ["openai", "pydantic", "inquirer", "colorama", "pyreadline3"]
 
 setup(
     name="langclient",
-    version="0.3.0",
+    version="0.3.1",
     description="Simple OpenAI language repl client",
     author="Juan Molina Riddell",
     author_email="jmriddell@protonmail.ch",
