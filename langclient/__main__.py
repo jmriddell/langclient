@@ -12,7 +12,9 @@ from langclient.start_menu import select_language_model
 from os.path import isfile, expanduser
 
 from pyreadline3 import Readline
+
 readline = Readline()
+
 
 def _graceful_exit(function: Callable) -> Callable:
     """Call the given function and exit gracefully on KeyboardInterrupt."""
