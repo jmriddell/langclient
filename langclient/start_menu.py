@@ -2,6 +2,9 @@ import inquirer
 import json
 from os.path import exists, expanduser
 
+from langclient.models import LanguageModel
+from typing import List
+
 default_user_config_file = expanduser("~/.langclient/user_config.json")
 
 
@@ -32,22 +35,31 @@ def user_name(file_path: str = default_user_config_file) -> str:
     return user_name
 
 
-def select_language_model() -> str:
+def _language_models() -> List[LanguageModel]:
+    with open("./langclient/models.json", "r") as file:
+        model_list_data = json.load(file)
+
+    _unpack_model = lambda model_data: LanguageModel(**model_data)
+    models = list(map(_unpack_model, model_list_data))
+
+    return models
+
+
+def select_language_model() -> LanguageModel:
     """Select between the most relevant models"""
+
+    models = _language_models()
+    model_names = list(map(lambda model: model.name, models))
+
     select_model = [
         inquirer.List(
-            "model",
+            "model_name",
             message="Select a model:",
-            choices=[
-                "gpt-3.5-turbo-0125",
-                "gpt-4-0125-preview",
-                "gpt-4-1106-preview",
-                "gpt-4",
-                "gpt-4-32k",
-            ],
+            choices=model_names,
         ),
     ]
 
-    answer = inquirer.prompt(select_model)
+    answer = inquirer.prompt(select_model)["model_name"]
+    model_selected = list(filter(lambda model: model.name == answer, models))
 
-    return answer["model"]
+    return model_selected[0]

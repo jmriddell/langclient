@@ -17,3 +17,10 @@ class Message(BaseModel):
 
 class Chat(BaseModel):
     messages: list[Message]
+
+
+class LanguageModel(BaseModel):
+    name: str
+    max_token: int
+    cost_per_1kT_input: float
+    cost_per_1kT_output: float
