@@ -53,7 +53,8 @@ def chat_input() -> Iterable[Message]:
     """Chat input stream."""
 
     while True:
-        input_message = input(Fore.CYAN + "You:\n" + Fore.RESET)
+        print(Fore.CYAN + "You:" + Fore.RESET)
+        input_message = input()
         yield _enhance_user_input(input_message)
 
 
