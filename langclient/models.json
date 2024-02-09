@@ -1,0 +1,32 @@
+[
+    {
+        "name": "gpt-3.5-turbo-0125",
+        "max_token": 16000,
+        "cost_per_1kT_input": 0.0005,
+        "cost_per_1kT_output": 0.0015
+    },
+    {
+        "name": "gpt-4-0125-preview",
+        "max_token": 128000,
+        "cost_per_1kT_input": 0.01,
+        "cost_per_1kT_output": 0.03
+    },
+    {
+        "name": "gpt-4-1106-preview",
+        "max_token": 128000,
+        "cost_per_1kT_input": 0.01,
+        "cost_per_1kT_output": 0.03
+    },
+    {
+        "name": "gpt-4",
+        "max_token": 16000,
+        "cost_per_1kT_input": 0.03,
+        "cost_per_1kT_output": 0.06
+    },
+    {
+        "name": "gpt-4-32k",
+        "max_token": 32000,
+        "cost_per_1kT_input": 0.06,
+        "cost_per_1kT_output": 0.12
+    }
+]
