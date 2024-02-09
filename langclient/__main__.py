@@ -8,7 +8,7 @@ from typing import Iterable, Callable
 from langclient.chat_functions import stream_chat
 from langclient.interactive_chat_handling import chat_input, chat_sequence_process
 from langclient.openai_auth import use_key, read_key_from_file
-from langclient.start_menu import select_language_model
+from langclient.start_menu import select_language_model, user_name
 from os.path import isfile, expanduser
 from os import name
 
@@ -94,13 +94,14 @@ def interactve_chat(
         or _prompt_for_api_key()
     )
 
+    input_name = user_name()
     model_selected = select_language_model()
 
     stream_chat_ = use_key(api_key)(
         partial(stream_chat, model=model_selected, max_tokens=3500)
     )
 
-    for _ in chat_sequence_process(chat_input(), stream_chat_):
+    for _ in chat_sequence_process(chat_input(input_name), stream_chat_):
         pass
 
 

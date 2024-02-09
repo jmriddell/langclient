@@ -49,11 +49,11 @@ def _enhance_user_input(user_input: str) -> Message:
     return Message(role=Role.USER, content=message_content)
 
 
-def chat_input() -> Iterable[Message]:
+def chat_input(user_name: str) -> Iterable[Message]:
     """Chat input stream."""
 
     while True:
-        print(Fore.CYAN + "You:" + Fore.RESET)
+        print(Fore.CYAN + f"{user_name}:" + Fore.RESET)
         input_message = input()
         yield _enhance_user_input(input_message)
 
