@@ -29,7 +29,7 @@ def stream_chat(
         frequency_penalty=frequency_penalty,
         presence_penalty=presence_penalty,
         stream=True,
-    )
+    )  # type: ignore[assignment] # TODO: Do it properly
 
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
 
