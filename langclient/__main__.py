@@ -10,10 +10,15 @@ from langclient.interactive_chat_handling import chat_input, chat_sequence_proce
 from langclient.openai_auth import use_key, read_key_from_file
 from langclient.start_menu import select_language_model
 from os.path import isfile, expanduser
+from os import name
 
-from pyreadline3 import Readline
 
-readline = Readline()
+if name == "nt":
+    from pyreadline3 import Readline
+
+    readline = Readline()
+else:
+    import readline  # noqa: F401
 
 
 def _graceful_exit(function: Callable) -> Callable:
