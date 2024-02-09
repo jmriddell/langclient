@@ -44,9 +44,11 @@ At startup select the model to interact.
 
 ```bash
 [?] Select a model:
- > gpt-3.5-turbo-1106
+ > gpt-3.5-turbo-0125
+   gpt-4-0125-preview
    gpt-4-1106-preview
    gpt-4
+   gpt-4-32k
 ```
 
 Check the [pricing cuotas](https://openai.com/pricing) and [usage dashboard](https://platform.openai.com/usage).
