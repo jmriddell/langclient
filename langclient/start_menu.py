@@ -6,7 +6,7 @@ from langclient.models import LanguageModel
 from typing import List
 
 default_user_config_file = expanduser("~/.langclient/user_config.json")
-
+default_models_data_file = expanduser("~/.langclient/models.json")
 
 def save_user_name(user_name: str, file_path: str = default_user_config_file):
     """Save user name on user config json file"""
@@ -36,7 +36,7 @@ def user_name(file_path: str = default_user_config_file) -> str:
 
 
 def _language_models() -> List[LanguageModel]:
-    with open("./langclient/models.json", "r") as file:
+    with open(default_models_data_file, "r") as file:
         model_list_data = json.load(file)
 
     _unpack_model = lambda model_data: LanguageModel(**model_data)
