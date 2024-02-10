@@ -23,7 +23,7 @@ def _file_content_section(filename: str, file_content: str | None) -> str:
 def _get_file_content(filename: str) -> str | None:
     "Get the content of the file with the given name"
     try:
-        with open(filename) as data:
+        with open(filename, encoding="utf-8") as data:
             return data.read()
     except FileNotFoundError:
         return None
