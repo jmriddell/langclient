@@ -8,6 +8,7 @@ from typing import List
 default_user_config_file = expanduser("~/.langclient/user_config.json")
 default_models_data_file = expanduser("~/.langclient/models.json")
 
+
 def save_user_name(user_name: str, file_path: str = default_user_config_file):
     """Save user name on user config json file"""
     with open(file_path, "w") as file:
