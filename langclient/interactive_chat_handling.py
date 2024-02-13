@@ -82,7 +82,6 @@ def _step_process(
     previous_messages: list[Message], user_message: Message, chat_function: Callable
 ) -> list[Message]:
     """Get the next step in the conversation."""
-    print(Fore.CYAN + "\nAssistant:" + Fore.RESET)
     assistant_response_chunks = chat_function([*previous_messages, user_message])
 
     assistant_response = Message(
