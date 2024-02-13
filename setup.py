@@ -9,7 +9,7 @@ DEPENDENCIES = ["openai", "pydantic", "inquirer", "colorama", "pyreadline3", "ti
 
 setup(
     name="langclient",
-    version="0.3.3",
+    version="0.3.4",
     description="Simple OpenAI language repl client",
     author="Juan Molina Riddell",
     author_email="jmriddell@protonmail.ch",
