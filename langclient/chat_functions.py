@@ -1,4 +1,5 @@
 from typing import Iterable, TypeGuard
+from colorama import Fore
 
 from openai import OpenAI
 from openai.types.chat import ChatCompletionChunk
@@ -16,7 +17,13 @@ def _filter_content_by_role(messages: list[Message], role: str):
     return role_content
 
 
-def count_tokens(messages: list[Message], model: LanguageModel):
+def _format_number(number: int | float) -> str:
+    if number > 1000:
+        return f"{round(number / 1000)}k"
+    return f"{number}"
+
+
+def _token_usage(messages: list[Message], model: LanguageModel):
     input_contents = _filter_content_by_role(messages, "user")
     outputs_contents = _filter_content_by_role(messages, "assistant")
 
@@ -28,14 +35,15 @@ def count_tokens(messages: list[Message], model: LanguageModel):
         "output": sum(map(content_tokens, outputs_contents)),
     }
 
-    tokens_total = tokens["input"] + tokens["output"]
+    tokens_messages = tokens["input"] + tokens["output"]
 
     input_cost = tokens["input"] / 1000 * model.cost_per_1kT_input
     output_cost = tokens["output"] / 1000 * model.cost_per_1kT_output
-    cost_total = input_cost + output_cost
+    cost_total = "%.2f" % (input_cost + output_cost)
 
-    print(f"Token usage: {tokens_total}/{model.max_token}")
-    print(f"Accummulated cost: USD ${cost_total}")
+    usage = f"{_format_number(tokens_messages)}/{_format_number(model.max_token)}"
+
+    return f" {Fore.MAGENTA}({usage}){Fore.RESET} {Fore.GREEN}${cost_total}{Fore.RESET}"
 
 
 def stream_chat(
@@ -64,7 +72,10 @@ def stream_chat(
 
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
 
-    count_tokens(messages, model)
+    assistant_head = f"\n{Fore.CYAN}Assistant:{Fore.RESET}"
+    assistant_head += _token_usage(messages, model)
+
+    print(assistant_head)
 
     def _typeguard(content: str | None) -> TypeGuard[str]:
         return content is not None
