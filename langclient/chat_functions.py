@@ -29,8 +29,8 @@ def _token_cost(chat_tokens: dict[str, list[int]], model: LanguageModel):
     tokens_accummulated_input = _sum_accumulated_tokens(chat_tokens["input"])
     tokens_accummulated_output = _sum_accumulated_tokens(chat_tokens["output"])
 
-    input_cost = tokens_accummulated_input / 1000 * model.cost_per_1kT_input
-    output_cost = tokens_accummulated_output / 1000 * model.cost_per_1kT_output
+    input_cost = tokens_accummulated_input / 1000 * model.cost_1kT_input
+    output_cost = tokens_accummulated_output / 1000 * model.cost_1kT_output
 
     return input_cost + output_cost
 
