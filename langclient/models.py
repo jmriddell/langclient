@@ -22,5 +22,5 @@ class Chat(BaseModel):
 class LanguageModel(BaseModel):
     name: str
     max_token: int
-    cost_per_1kT_input: float
-    cost_per_1kT_output: float
+    cost_1kT_input: float
+    cost_1kT_output: float
