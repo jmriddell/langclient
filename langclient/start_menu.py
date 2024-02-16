@@ -1,12 +1,13 @@
 import inquirer
 import json
 from os.path import exists, expanduser
+from pkgutil import get_data
 
 from langclient.models import LanguageModel
 from typing import List
 
 default_user_config_file = expanduser("~/.langclient/user_config.json")
-default_models_data_file = expanduser("~/.langclient/models.json")
+default_models_data_file = ("langclient.data", "models.json")
 
 
 def save_user_name(user_name: str, file_path: str = default_user_config_file):
@@ -37,8 +38,9 @@ def user_name(file_path: str = default_user_config_file) -> str:
 
 
 def _language_models() -> List[LanguageModel]:
-    with open(default_models_data_file, "r") as file:
-        model_list_data = json.load(file)
+    model_list_json_string = get_data(*default_models_data_file)
+    assert model_list_json_string is not None, "No models data found"
+    model_list_data = json.loads(model_list_json_string.decode("utf-8"))
 
     _unpack_model = lambda model_data: LanguageModel(**model_data)
     models = list(map(_unpack_model, model_list_data))
