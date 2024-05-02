@@ -94,12 +94,14 @@ def interactve_chat(
         or _prompt_for_api_key()
     )
 
-    input_name = user_name()
+    user = user_name()
     model_selected = select_language_model()
 
     stream_chat_ = use_key(api_key)(partial(stream_chat, model=model_selected))
 
-    for _ in chat_sequence_process(chat_input(input_name), stream_chat_):
+    for _ in chat_sequence_process(
+        chat_input(user), stream_chat_, model_selected, user_name=user
+    ):
         pass
 
 
