@@ -65,7 +65,6 @@ def stream_chat(
     api_key: str,
     model: LanguageModel,
     temperature=1,
-    max_tokens=14505,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0,
@@ -75,8 +74,7 @@ def stream_chat(
     generator: Iterable[ChatCompletionChunk] = client.chat.completions.create(
         model=model.name,
         messages=list_of_dict_messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
+        temperature=temperature,  # next parameters have no effect
         top_p=top_p,
         frequency_penalty=frequency_penalty,
         presence_penalty=presence_penalty,

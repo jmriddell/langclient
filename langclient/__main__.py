@@ -97,9 +97,7 @@ def interactve_chat(
     input_name = user_name()
     model_selected = select_language_model()
 
-    stream_chat_ = use_key(api_key)(
-        partial(stream_chat, model=model_selected, max_tokens=3500)
-    )
+    stream_chat_ = use_key(api_key)(partial(stream_chat, model=model_selected))
 
     for _ in chat_sequence_process(chat_input(input_name), stream_chat_):
         pass
