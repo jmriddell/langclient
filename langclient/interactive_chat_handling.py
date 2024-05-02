@@ -95,7 +95,8 @@ def _step_process(
 
     chat_updated = [*previous_messages, user_message, assistant_response]
 
-    user_head = Fore.CYAN + f"{user_name}:" + Fore.RESET
+    user_name_color = Fore.CYAN
+    user_head = f"{user_name_color}{user_name}:{Fore.RESET}"
     user_head += token_usage_stats(chat_updated, model)
 
     print()
@@ -115,7 +116,8 @@ def chat_sequence_process(
         _step_process, chat_function=chat_function, user_name=user_name, model=model
     )
 
-    first_user_head = Fore.CYAN + f"{user_name}:" + Fore.RESET
+    user_name_color = Fore.CYAN
+    first_user_head = f"{user_name_color}{user_name}:{Fore.RESET}"
     print(first_user_head)
 
     return accumulate(user_input, accumulate_function, initial=[])

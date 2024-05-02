@@ -54,8 +54,11 @@ def token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
     usage_stats = f"{_format_token_number(tokens_messages)}/"
     usage_stats += f"{_format_token_number(model.max_token)}"
 
-    stats_string = f" {Fore.MAGENTA}({usage_stats}){Fore.RESET}"
-    stats_string += f" {Fore.GREEN}${cost_stats}{Fore.RESET}"
+    color_token = Fore.LIGHTBLACK_EX
+    color_cost = Fore.LIGHTGREEN_EX
+
+    stats_string = f" {color_token}({usage_stats}){Fore.RESET}"
+    stats_string += f" {color_cost}${cost_stats}{Fore.RESET}"
     return stats_string
 
 
@@ -83,9 +86,13 @@ def stream_chat(
 
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
 
-    assistant_head = f"\n{Fore.CYAN}Assistant:{Fore.RESET}"
+    color_assistant = Fore.BLUE
+    assistant_name = "Assistant"
+
+    assistant_head = f"{color_assistant}{assistant_name}:{Fore.RESET}"
     assistant_head += token_usage_stats(messages, model)
 
+    print()
     print(assistant_head)
 
     def _typeguard(content: str | None) -> TypeGuard[str]:
