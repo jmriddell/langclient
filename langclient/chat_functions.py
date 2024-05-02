@@ -35,7 +35,7 @@ def _token_cost(chat_tokens: dict[str, list[int]], model: LanguageModel):
     return input_cost + output_cost
 
 
-def _token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
+def token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
     input_content = _filter_content_by_role(messages, "user")
     output_content = _filter_content_by_role(messages, "assistant")
 
@@ -84,7 +84,7 @@ def stream_chat(
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
 
     assistant_head = f"\n{Fore.CYAN}Assistant:{Fore.RESET}"
-    assistant_head += _token_usage_stats(messages, model)
+    assistant_head += token_usage_stats(messages, model)
 
     print(assistant_head)
 

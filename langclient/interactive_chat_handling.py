@@ -5,7 +5,7 @@ from itertools import accumulate
 from functools import partial
 
 from langclient.models import Message, Role, LanguageModel
-from langclient.chat_functions import _token_usage_stats
+from langclient.chat_functions import token_usage_stats
 
 
 def _get_files_from_message(message: str) -> list[str]:
@@ -96,7 +96,7 @@ def _step_process(
     chat_updated = [*previous_messages, user_message, assistant_response]
 
     user_head = Fore.CYAN + f"{user_name}:" + Fore.RESET
-    user_head += _token_usage_stats(chat_updated, model)
+    user_head += token_usage_stats(chat_updated, model)
 
     print()
     print()
