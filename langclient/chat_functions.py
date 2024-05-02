@@ -35,7 +35,7 @@ def _token_cost(chat_tokens: dict[str, list[int]], model: LanguageModel):
     return input_cost + output_cost
 
 
-def _token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
+def token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
     input_content = _filter_content_by_role(messages, "user")
     output_content = _filter_content_by_role(messages, "assistant")
 
@@ -54,8 +54,11 @@ def _token_usage_stats(messages: list[Message], model: LanguageModel) -> str:
     usage_stats = f"{_format_token_number(tokens_messages)}/"
     usage_stats += f"{_format_token_number(model.max_token)}"
 
-    stats_string = f" {Fore.MAGENTA}({usage_stats}){Fore.RESET}"
-    stats_string += f" {Fore.GREEN}${cost_stats}{Fore.RESET}"
+    color_token = Fore.LIGHTBLACK_EX
+    color_cost = Fore.LIGHTGREEN_EX
+
+    stats_string = f" {color_token}({usage_stats}){Fore.RESET}"
+    stats_string += f" {color_cost}${cost_stats}{Fore.RESET}"
     return stats_string
 
 
@@ -65,7 +68,6 @@ def stream_chat(
     api_key: str,
     model: LanguageModel,
     temperature=1,
-    max_tokens=14505,
     top_p=1,
     frequency_penalty=0,
     presence_penalty=0,
@@ -75,8 +77,7 @@ def stream_chat(
     generator: Iterable[ChatCompletionChunk] = client.chat.completions.create(
         model=model.name,
         messages=list_of_dict_messages,
-        temperature=temperature,
-        max_tokens=max_tokens,
+        temperature=temperature,  # next parameters have no effect
         top_p=top_p,
         frequency_penalty=frequency_penalty,
         presence_penalty=presence_penalty,
@@ -85,9 +86,13 @@ def stream_chat(
 
     deltas_content = map(lambda chunk: chunk.choices[0].delta.content, generator)
 
-    assistant_head = f"\n{Fore.CYAN}Assistant:{Fore.RESET}"
-    assistant_head += _token_usage_stats(messages, model)
+    color_assistant = Fore.BLUE
+    assistant_name = "Assistant"
 
+    assistant_head = f"{color_assistant}{assistant_name}:{Fore.RESET}"
+    assistant_head += token_usage_stats(messages, model)
+
+    print()
     print(assistant_head)
 
     def _typeguard(content: str | None) -> TypeGuard[str]:
