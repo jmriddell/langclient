@@ -6,13 +6,7 @@
         "cost_1kT_output": 0.0015
     },
     {
-        "name": "gpt-4-0125-preview",
-        "max_token": 128000,
-        "cost_1kT_input": 0.01,
-        "cost_1kT_output": 0.03
-    },
-    {
-        "name": "gpt-4-1106-preview",
+        "name": "gpt-4-turbo-2024-04-09",
         "max_token": 128000,
         "cost_1kT_input": 0.01,
         "cost_1kT_output": 0.03
