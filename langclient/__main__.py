@@ -100,7 +100,7 @@ def interactve_chat(
     stream_chat_ = use_key(api_key)(partial(stream_chat, model=model_selected))
 
     for _ in chat_sequence_process(
-        chat_input(user), stream_chat_, model_selected, user_name=user
+        chat_input(), stream_chat_, model_selected, user_name=user
     ):
         pass
 

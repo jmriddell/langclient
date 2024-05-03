@@ -5,7 +5,7 @@ from itertools import accumulate
 from functools import partial
 
 from langclient.models import Message, Role, LanguageModel
-from langclient.chat_functions import token_usage_stats
+from langclient.token_usage import token_usage_stats
 
 
 def _get_files_from_message(message: str) -> list[str]:
@@ -50,7 +50,7 @@ def _enhance_user_input(user_input: str) -> Message:
     return Message(role=Role.USER, content=message_content)
 
 
-def chat_input(user_name: str) -> Iterable[Message]:
+def chat_input() -> Iterable[Message]:
     """Chat input stream."""
 
     while True:
