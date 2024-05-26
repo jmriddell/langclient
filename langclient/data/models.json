@@ -22,5 +22,17 @@
         "max_token": 32000,
         "cost_1kT_input": 0.06,
         "cost_1kT_output": 0.12
+    },
+    {
+        "name": "gpt-4o",
+        "max_token": 128000,
+        "cost_1kT_input": 0.005,
+        "cost_1kT_output": 0.015
+    },
+    {
+        "name": "gpt-4o-2024-05-13",
+        "max_token": 128000,
+        "cost_1kT_input": 0.005,
+        "cost_1kT_output": 0.015
     }
 ]
